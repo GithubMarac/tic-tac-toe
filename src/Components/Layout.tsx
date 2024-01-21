@@ -16,7 +16,7 @@ export default function Layout() {
           <li>
             <Link to="/register">Register</Link>
           </li>
-          <li>
+          <li className='float-right'>
             <Login />
           </li>
         </ul>
