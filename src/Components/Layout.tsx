@@ -9,6 +9,7 @@ export default function Layout() {
   const isUsertAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
 
   const handleLogout = async () => {
+    localStorage.removeItem('token');
     try{
       await axiosInstance.post('/logout/')
       .then(res => {

@@ -10,7 +10,6 @@ import Games from "./Components/Games"
 import Home from "./Pages/Home"
 import Register from "./Pages/Register"
 
-import "./CSS/Navbar.css"
 import './App.css';
 
 function App() {

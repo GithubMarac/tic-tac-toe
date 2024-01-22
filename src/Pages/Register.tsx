@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 export default function Register() {
+  const navigate = useNavigate();
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [formData, setFormData] = useState({
     username: '',
@@ -31,13 +33,14 @@ export default function Register() {
       alert("Passwords don't match");
       return;
     }
-
     
     try {
       const response = await axios.post('https://tictactoe.aboutdream.io/register/', {
         username: formData.username,
         password: formData.password,
-      });
+      }).then(() => {
+        navigate("/");
+      })
 
 
       setFormData({
@@ -47,7 +50,6 @@ export default function Register() {
       });
       setIsPasswordValid(true);
 
-      console.log("alert");
 
     } catch (error: any) {
       console.error('Registration error:', error.message);
