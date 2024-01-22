@@ -1,0 +1,21 @@
+.square {
+    font-size: 20px;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    line-height: 50px;
+    border: 1px solid #999;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .status {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+  
+  .board-row:after {
+    content: '';
+    display: table;
+    clear: both;
+  }

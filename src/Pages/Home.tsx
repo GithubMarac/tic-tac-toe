@@ -11,22 +11,20 @@ export default function Home() {
 
   const newGame = async () => {
     await axiosInstance.post('/games/').then((response) => {
-      console.log(response);
       setCurrentGame(response.data.id);
     });
   };
 
   const joinGame = async () => {
     const gameId = document.getElementById('gameId') as HTMLInputElement | null;
-    console.log(gameId!.value);
     await axiosInstance.post(`games/${gameId?.value}/join/`).then((response) => {
       setCurrentGame(gameId?.value!);
-    });
+    }).catch((err) => console.log(err));
   };
 
   if(isUsertAuthenticated){
     if(currentGame != ''){
-      return (<Game />)
+      return (<Game gameId={currentGame} />)
     }
     return (
         <main>

@@ -4,11 +4,15 @@ const axiosInstance = axios.create({
   baseURL: 'https://tictactoe.aboutdream.io',
 });
 
+declare module 'axios' {   
+  export interface AxiosRequestConfig {
+      handlerEnabled?: boolean;   
+  } 
+}
+
 axiosInstance.interceptors.request.use(
     config => {
       const token = localStorage.getItem('token')
-      console.log("test")
-      console.log(token);
       if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
       }

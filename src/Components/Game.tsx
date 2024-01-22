@@ -1,84 +1,74 @@
 import '../CSS/ticTacToe.css';
+import React, { useState, useEffect } from 'react';
+import axiosInstance from '../axiosInstance';
 
-export default function Game() {
+export default function Game(props : any) {
+  const [boardState, setBoardState] = useState({
+    board: [
+      [null, null, null],
+      [null, null, null],
+      [null, null, null],
+    ],
+  });
+
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      await axiosInstance.get(`games/${props.gameId}/`).then((response) => {
+        console.log(response.data);
+        console.log(response.data.board);
+        console.log("boardState");
+        console.log(boardState.board);
+        setBoardState({board : response.data.board});
+      }).catch(err => console.log(err));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+  
+  async function handleClick(index: number): Promise<void> {
+    const row = Math.floor(index / 3);
+    const cell = index % 3;
+
+    await axiosInstance.post(`games/${props.gameId}/move/`, {
+      "row": row,
+      "col": cell
+    }).then((response) => {
+      console.log("move")
+      console.log(response)
+    }).catch((err) => console.log(err));
+  }
+
+  function renderSquare(index: number) {
+    const row = Math.floor(index / 3);
+    const cell = index % 3;
+  
+    return (
+      <button id={index.toString()} className="square" onClick={() => handleClick(index)}>
+          {boardState.board[row][cell] == null ? '' : boardState.board[row][cell]}
+      </button>
+    );
+  }
+
+
+
   return (
-    <>
-      <form id="tictactoe">
-        <input type="radio" name="cell-0" id="cell-0-x" />
-        <input type="radio" name="cell-0" id="cell-0-o" />
-        <input type="radio" name="cell-1" id="cell-1-x" />
-        <input type="radio" name="cell-1" id="cell-1-o" />
-        <input type="radio" name="cell-2" id="cell-2-x" />
-        <input type="radio" name="cell-2" id="cell-2-o" />
-        <input type="radio" name="cell-3" id="cell-3-x" />
-        <input type="radio" name="cell-3" id="cell-3-o" />
-        <input type="radio" name="cell-4" id="cell-4-x" />
-        <input type="radio" name="cell-4" id="cell-4-o" />
-        <input type="radio" name="cell-5" id="cell-5-x" />
-        <input type="radio" name="cell-5" id="cell-5-o" />
-        <input type="radio" name="cell-6" id="cell-6-x" />
-        <input type="radio" name="cell-6" id="cell-6-o" />
-        <input type="radio" name="cell-7" id="cell-7-x" />
-        <input type="radio" name="cell-7" id="cell-7-o" />
-        <input type="radio" name="cell-8" id="cell-8-x" />
-        <input type="radio" name="cell-8" id="cell-8-o" />
-
-        <div id="board" className="center">
-          <div className="tile" id="tile-0">
-            <label htmlFor="cell-0-x"></label>
-            <label htmlFor="cell-0-o"></label>
-            <div></div>
-          </div>
-          <div className="tile" id="tile-1">
-            <label htmlFor="cell-1-x"></label>
-            <label htmlFor="cell-1-o"></label>
-            <div></div>
-          </div>
-          <div className="tile" id="tile-2">
-            <label htmlFor="cell-2-x"></label>
-            <label htmlFor="cell-2-o"></label>
-            <div></div>
-          </div>
-          <div className="tile" id="tile-3">
-            <label htmlFor="cell-3-x"></label>
-            <label htmlFor="cell-3-o"></label>
-            <div></div>
-          </div>
-          <div className="tile" id="tile-4">
-            <label htmlFor="cell-4-x"></label>
-            <label htmlFor="cell-4-o"></label>
-            <div></div>
-          </div>
-          <div className="tile" id="tile-5">
-            <label htmlFor="cell-5-x"></label>
-            <label htmlFor="cell-5-o"></label>
-            <div></div>
-          </div>
-          <div className="tile" id="tile-6">
-            <label htmlFor="cell-6-x"></label>
-            <label htmlFor="cell-6-o"></label>
-            <div></div>
-          </div>
-          <div className="tile" id="tile-7">
-            <label htmlFor="cell-7-x"></label>
-            <label htmlFor="cell-7-o"></label>
-            <div></div>
-          </div>
-          <div className="tile" id="tile-8">
-            <label htmlFor="cell-8-x"></label>
-            <label htmlFor="cell-8-o"></label>
-            <div></div>
-          </div>
-        </div>
-        <div id="end">
-          <div id="message" className="center">
-            <div>
-              <input type="reset" form="tictactoe" value="Play again" />
-            </div>
-          </div>
-        </div>
-      </form>
-
-    </>
+    <div className='m-auto text-center mt-9'>
+      <div className="board-row">
+        {renderSquare(0)}
+        {renderSquare(1)}
+        {renderSquare(2)}
+      </div>
+      <div className="board-row">
+        {renderSquare(3)}
+        {renderSquare(4)}
+        {renderSquare(5)}
+      </div>
+      <div className="board-row">
+        {renderSquare(6)}
+        {renderSquare(7)}
+        {renderSquare(8)}
+      </div>
+    </div>
   );
-};
+}
+
