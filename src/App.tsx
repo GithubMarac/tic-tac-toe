@@ -15,6 +15,7 @@ import './App.css';
 function App() {
   const dispatch = useDispatch();
   
+  //this should be in storage service
   if(localStorage.getItem('token')){
     dispatch(loginSuccess());
   }

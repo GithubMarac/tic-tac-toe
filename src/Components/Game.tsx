@@ -15,10 +15,6 @@ export default function Game(props : any) {
   useEffect(() => {
     const interval = setInterval(async () => {
       await axiosInstance.get(`games/${props.gameId}/`).then((response) => {
-        console.log(response.data);
-        console.log(response.data.board);
-        console.log("boardState");
-        console.log(boardState.board);
         setBoardState({board : response.data.board});
       }).catch(err => console.log(err));
     }, 1000);
@@ -33,8 +29,6 @@ export default function Game(props : any) {
       "row": row,
       "col": cell
     }).then((response) => {
-      console.log("move")
-      console.log(response)
     }).catch((err) => console.log(err));
   }
 

@@ -9,12 +9,14 @@ export default function Layout() {
   const isUsertAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
 
   const handleLogout = async () => {
+    //I get forbiden logout so code below is not inside promise
     localStorage.removeItem('token');
+    dispatch(logout());
+
     try{
       await axiosInstance.post('/logout/')
       .then(res => {
-        localStorage.removeItem('token');
-        dispatch(logout());
+
       })
     }catch(e){
       console.log(e);
@@ -34,7 +36,7 @@ export default function Layout() {
             <Link to="/games">Games</Link>
           </li>
           <li>
-            <Link to="/register">Register</Link>
+            {isUsertAuthenticated ? '' : <Link to="/register">Register</Link>}
           </li>
           <li className="float-right">
             <p onClick={handleLogout} className={isUsertAuthenticated ? 'font-bold size-10 mr-11' : 'hidden'}>Logout</p>

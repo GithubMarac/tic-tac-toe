@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 export default function Register() {
   const navigate = useNavigate();
+  const isUsertAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [formData, setFormData] = useState({
     username: '',
@@ -11,7 +13,10 @@ export default function Register() {
     confirmPassword: ''
   });
 
-  // Function to handle form field changes
+  if(isUsertAuthenticated){
+    navigate("/");
+  }
+
   const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
 
@@ -25,7 +30,6 @@ export default function Register() {
     }
   };
 
-  // Function to handle form submission
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
@@ -41,7 +45,6 @@ export default function Register() {
       }).then(() => {
         navigate("/");
       })
-
 
       setFormData({
         username: '',
