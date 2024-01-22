@@ -2,6 +2,8 @@ import '../CSS/ticTacToe.css';
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../axiosInstance';
 
+let first_player : any, second_player : any;
+
 export default function Game(props : any) {
   const [boardState, setBoardState] = useState({
     board: [
@@ -11,10 +13,12 @@ export default function Game(props : any) {
     ],
   });
 
-
   useEffect(() => {
     const interval = setInterval(async () => {
       await axiosInstance.get(`games/${props.gameId}/`).then((response) => {
+        console.log(response)
+        first_player = response.data.first_player
+        second_player = response.data.second_player
         setBoardState({board : response.data.board});
       }).catch(err => console.log(err));
     }, 1000);
@@ -35,29 +39,38 @@ export default function Game(props : any) {
   function renderSquare(index: number) {
     const row = Math.floor(index / 3);
     const cell = index % 3;
+
+    let cell_output;
+
+    if(boardState.board[row][cell] == first_player?.id){
+      cell_output = first_player?.username
+    }else if(boardState.board[row][cell] == second_player?.id){
+      cell_output = second_player?.username
+    }else{
+      cell_output = '';
+    }
+
   
     return (
       <button id={index.toString()} className="square" onClick={() => handleClick(index)}>
-          {boardState.board[row][cell] == null ? '' : boardState.board[row][cell]}
+          {boardState.board[row][cell] ? cell_output : ''}
       </button>
     );
   }
 
-
-
   return (
-    <div className='m-auto text-center mt-9'>
-      <div className="board-row">
+    <div className='m-auto text-center mt-9 p-5'>
+      <div className="board-row flex flex-nowrap">
         {renderSquare(0)}
         {renderSquare(1)}
         {renderSquare(2)}
       </div>
-      <div className="board-row">
+      <div className="board-row flex flex-nowrap">
         {renderSquare(3)}
         {renderSquare(4)}
         {renderSquare(5)}
       </div>
-      <div className="board-row">
+      <div className="board-row flex flex-nowrap">
         {renderSquare(6)}
         {renderSquare(7)}
         {renderSquare(8)}

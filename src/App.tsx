@@ -5,16 +5,18 @@ import { useDispatch } from 'react-redux';
 import { loginSuccess } from "./Redux/authSlice";
 
 import Layout from "./Components/Layout"
-import Games from "./Components/Games"
 
 import Home from "./Pages/Home"
 import Register from "./Pages/Register"
+import Games from "./Pages/Games"
+
+import axiosInstance from './axiosInstance';
 
 import './App.css';
 
 function App() {
   const dispatch = useDispatch();
-  
+
   //this should be in storage service
   if(localStorage.getItem('token')){
     dispatch(loginSuccess());
