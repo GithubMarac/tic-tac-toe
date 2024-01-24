@@ -2,8 +2,6 @@ import '../CSS/ticTacToe.css';
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../axiosInstance';
 
-let first_player : any, second_player : any;
-
 export default function Game(props : any) {
   const [boardState, setBoardState] = useState({
     board: [
@@ -13,12 +11,21 @@ export default function Game(props : any) {
     ],
   });
 
+  const [playersState, setPlayersState] = useState({
+    first_player: {
+      "id": null,
+      "username": null
+    },
+    second_player: {
+      "id": null,
+      "username": null
+    },
+  });
+
   useEffect(() => {
     const interval = setInterval(async () => {
       await axiosInstance.get(`games/${props.gameId}/`).then((response) => {
-        console.log(response)
-        first_player = response.data.first_player
-        second_player = response.data.second_player
+        setPlayersState({ first_player: response.data.first_player, second_player: response.data.second_player});
         setBoardState({board : response.data.board});
       }).catch(err => console.log(err));
     }, 1000);
@@ -42,10 +49,10 @@ export default function Game(props : any) {
 
     let cell_output;
 
-    if(boardState.board[row][cell] == first_player?.id){
-      cell_output = first_player?.username
-    }else if(boardState.board[row][cell] == second_player?.id){
-      cell_output = second_player?.username
+    if(boardState.board[row][cell] == playersState.first_player?.id){
+      cell_output = playersState.first_player?.username
+    }else if(boardState.board[row][cell] == playersState.second_player?.id){
+      cell_output = playersState.second_player?.username
     }else{
       cell_output = '';
     }
